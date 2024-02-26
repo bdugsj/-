@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bone-下载站</title>
+    <meta name="author" content="bone">
+    <meta name="keywords" content="bone,导航,网址" />
+    <meta name="description" content="简单但实用的下载站" />
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 180px;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            padding-top: 20px;
+        }
+
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+        }
+
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        .main {
+            margin-left: 180px;
+            padding: 16px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <a href="#" onclick="loadContent('home')">首页</a>
+        <a href="#" onclick="loadContent('news')">系统镜像下载</a>
+        <a href="#" onclick="loadContent('contact')">必备工具</a>
+        <a href="#" onclick="loadContent('about')">关于我</a>
+    </div>
+
+    <div class="main">
+        <!-- 主内容区域，将通过JavaScript动态加载 -->
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // 页面加载时，默认加载首页内容
+            loadContent('home');
+        });
+
+        function loadContent(page) {
+            fetch(`http://localhost:3000/api/content/${page}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.querySelector('.main').innerHTML = data.content;
+                    } else {
+                        document.querySelector('.main').innerHTML = '内容加载失败';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.querySelector('.main').innerHTML = '内容加载失败';
+                });
+        }
+    </script>
+
+</body>
+
+</html>
